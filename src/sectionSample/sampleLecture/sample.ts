@@ -1,5 +1,3 @@
-// 강의 내용
-
 // 예제 코드
 
 export const handleCalc = (a: number, b: number) => {
