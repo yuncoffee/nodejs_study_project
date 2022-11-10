@@ -8,7 +8,7 @@ console.log(__dirname)
 console.log(this) // {}
 console.log(this === module.exports) // true
 console.log(this === exports) // true
-console.log(this === globalThis)
+console.log(this === globalThis) // false
 function a() {
     // error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
     // console.log(this)
