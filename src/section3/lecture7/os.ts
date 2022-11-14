@@ -19,7 +19,7 @@ console.log("os.tmpdir() : ", os.tmpdir())
 
 console.log("운영체제 경로---------")
 
-console.log("os.cpus() : ", os.cpus())
+console.log("os.cpus() : ", os.cpus()) // 자주사용
 console.log("os.cpus().length : ", os.cpus().length)
 
 console.log("메모리 경로---------")
