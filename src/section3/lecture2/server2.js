@@ -8,7 +8,7 @@ const server = http.createServer(async(req, res) => {
         const data = await fs.readFile('./server2.html');  // server2.html 파일을 읽어서 data 넣어서 전송.
         res.end(data);
     } catch (error) {
-        console.log(error); // 에러 기록
+        console.eeror(error); // 에러 기록
         res.writeHead(200, { 'Contect-Type': 'text/plain; charset=utf-8'}); // 일반 문자열인걸 알려줌.
         res.end(err.message); // 에러가 나면 에러메세지가 일로 전송.?
     }
