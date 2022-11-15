@@ -12,10 +12,10 @@ const array = [
     Buffer.from("띄어쓰기"),
 ]
 
-const buffer2 = Buffer.concat(array)
+const buffer2 = Buffer.concat(array) // 버퍼 합치기
 console.log("concat:", buffer2.toString())
 // concat: 띄엄 띄엄 띄어쓰기
 
-const buffer3 = Buffer.alloc(5)
+const buffer3 = Buffer.alloc(5) // 빈 버퍼 생성
 console.log("alloc():", buffer3)
 // alloc(): <Buffer 00 00 00 00 00>
