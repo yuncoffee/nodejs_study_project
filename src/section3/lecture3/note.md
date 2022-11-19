@@ -1,107 +1,124 @@
-# global과 콘솔, 타이머
+# REST API 만들기
 
-## node 내장 객체 - 1
+## server - 3
 
-js 말고 노드가 제공하는 기본 기능들이 있음
+### REST API
 
-ex) module, export, global ...
+REST = Representational State Transfer
 
-### global
+서버의 자원을 정의하고 자원에 대한 주소를 지정하는 방법
 
-global = globalThis = window
+서버에서 요청을 보낼 때는 주소를 통해 요청의 내용을 표현
 
-``` node
-    <ref *1> Object [global] {
-  global: [Circular *1],
-  queueMicrotask: [Function: queueMicrotask],
-  clearImmediate: [Function: clearImmediate],
-  setImmediate: [Function: setImmediate] {
-    [Symbol(nodejs.util.promisify.custom)]: [Getter]
-  },
-  structuredClone: [Function: structuredClone],
-  clearInterval: [Function: clearInterval],
-  clearTimeout: [Function: clearTimeout],
-  setInterval: [Function: setInterval],
-  setTimeout: [Function: setTimeout] {
-    [Symbol(nodejs.util.promisify.custom)]: [Getter]
-  },
-  atob: [Function: atob],
-  btoa: [Function: btoa],
-  performance: Performance {
-    nodeTiming: PerformanceNodeTiming {
-      name: 'node',
-      entryType: 'node',
-      startTime: 0,
-      duration: 1620.0049439985305,
-      nodeStart: 49.161981999874115,
-      v8Start: 75.97010499984026,
-      bootstrapComplete: 168.21735199913383,
-      environment: 117.84096900001168,
-      loopStart: 1428.3596079982817,
-      loopExit: -1,
-      idleTime: 0.495622
-    },
-    timeOrigin: 1668086179316.855
-  },
-  fetch: [AsyncFunction: fetch],
-  exports: {}
-}
-```
+### HTTP 요청 메서드
 
-global은 전역 객체라 생략 가능 ㅇㅇ
-근데 전역으로 공유되서 찾기 힘드니까 전역으로 쓰는거 지양하자.
+- GET : 서버 자원을 가져오고자 할 때 사용, 데이터 서버 보낼 때 쿼리스트링 사용
+- POST : 서버에 자원을 새로 등록하고자 할 때 사용
+- PUT : 서버의 자원을 요청에 들어 있는 자원으로 치환 ex) 전체 수정
+- PATCH : 서버 자원의 일부만 수정하고자 할 떄 사용 ex) 부분 수정
+- DELETE : 서버의 자원 삭제
+- OPTIONS : 요청을 하기 전에 통신 옵션을 설명하기 위해 사용
 
----
-
-### console
-
-브라우저의 console이랑 비슷함
+### HTTP 프로토콜
 
 ``` typescript
+    
+// rest.ts
 
-// 라벨 사이의 시간 측정
-console.time("label")
-// task
-console.timeEnd("label")
+import { readFile } from "fs/promises"
+import { createServer } from "http"
 
-// 에러 콘솔
-console.error("error")
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const users: any = {} // 데이터 저장용
 
-// 일반 콘솔
-console.log("msg")
+createServer(async (req, res) => {
+    try {
+        if (req.method === "GET") { // get 요청왔을 때
+            if (req.url === "/") { // /(index) 요청왔을 떄
+                const data = await readFile("./index.html") // html 읽는다
+                res.writeHead(200, {
+                    "Content-Type": "text/html; charset=utf-8", // res header 설정 해준다
+                })
+                return res.end(data) // get 요청에 대한 response
+            } else if (req.url === "/about") { // /about 요청왔을 때
+                const data = await readFile("./about.html") // html 읽는다
+                res.writeHead(200, { //header 설정
+                    "Content-Type": "text/html; charset=utf-8",
+                })
+                return res.end(data) // 전달
+            } else if (req.url === "/users") { ///user 요청왔을 때
+                res.writeHead(200, { //header 설정
+                    "Content-Type": "application/json; charset=utf-8",
+                })
+                return res.end(JSON.stringify(users)) //users 문자열로 바꿔서 response
+            }
+            // /도 /about도 /users도 아니면
+            try {
+                const data = await readFile(`.${req.url}`) // 요청한 url로 파일 한번 읽어봄
+                return res.end(data) // 있으면 전달
+            } catch (err) {
+                // 주소에 해당하는 라우트를 못 찾았다는 404 Not Found error 발생
+            }
+        } else if (req.method === "POST") { // post 요청왔을 때
+            if (req.url === "/user") { ///user 요청왔을 때
+                let body = ""
+                // 요청의 body를 stream 형식으로 받음
+                req.on("data", (data) => { 
+                    body += data
+                })
+                // 요청의 body를 다 받은 후 실행됨
+                return req.on("end", () => {
+                    console.log("POST 본문(Body):", body)
+                    const { name } = JSON.parse(body)
+                    const id = Date.now()
+                    users[id] = name
+                    res.writeHead(201, {
+                        "Content-Type": "text/plain; charset=utf-8",
+                    })
+                    res.end("ok")
+                })
+            }
+        } else if (req.method === "PUT") {  // put 요청왔을 때
+            if (req.url && req.url.startsWith("/user/")) {
+                const key = req.url.split("/")[2]
+                let body = ""
+                req.on("data", (data) => { // 데이터 스트림
+                    body += data
+                })
+                return req.on("end", () => { // 스트림 끝남 
+                    console.log("PUT 본문(Body):", body)
+                    users[key] = JSON.parse(body).name // 데이터 -> JSON 변환
+                    res.writeHead(200, {
+                        "Content-Type": "text/plain; charset=utf-8",
+                    })
+                    return res.end("ok")
+                })
+            }
+        } else if (req.method === "DELETE") { // delete 요청왔을 때
+            if (req.url && req.url.startsWith("/user/")) {
+                const key = req.url.split("/")[2] 
+                delete users[key] // 유저 삭제
+                res.writeHead(200, {
+                    "Content-Type": "text/plain; charset=utf-8",
+                })
+                return res.end("ok")
+            }
+        }
+        res.writeHead(404) // 요청 처리 못했을 때
+        return res.end("NOT FOUND") // 404 NOT FOUDN 
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (err: any) {
+        console.error(err)
+        res.writeHead(500, { "Content-Type": "text/plain; charset=utf-8" })
+        res.end(err.message)
+    }
+}).listen(8082, () => {
+    console.log("8082번 포트에서 서버 대기 중입니다")
+})
 
-// 테이블 콘솔
-console.table([1,2,3])
-
-// 객체를 콘솔에 표시
-const _obj = {a : 1, b : "2"}
-console.dir(_obj, {color: true, depth: 1}) //console.dir(obj, options)
 
 ```
 
-### 타이머
+서버 실행 테스트 결과
 
-callback을 background로 보내는 비동기 함수들
-
-동작 예) 코드 실행 -> `background` -> `task queue` -> `call stack`
-
-특수한 경우(파일 시스템 접근, 네트워킹 같은 I/O 작업의 callback 안에서 타이머 호출)
-setImmediate는 setTimeout보다 먼저 실행됨
-
-그러나 항상 먼저 실행되는 건 아님
-
-**비동기처리를 하고싶은 경우라면 setTimeout(callback, 0) 대신  setImmediate(callback) 사용을 권장.**
-
-``` typescript
-
-// setTimeout(callback, ms) // ms 후 실행
-const timeout = setTimeout(()=>{
-    console.log("1.5초 후 실행")
-}, 1500)
-// setInterval(callback, ms) // ms 마다 반복
-
-// setImmediate(callback) // 즉시 실행
-
-// clearTimeout, clearInterval, clearImmediate
-clearTimeout(timeout) // 타이머 취소
-```
+<img src="./스크린샷%202022-11-16%20오후%2010.14.18.png" />

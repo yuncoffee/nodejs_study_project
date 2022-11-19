@@ -1,58 +1,63 @@
-# fs로 HTML 읽어 제공하기
+# node_modules와 npx, SemVer
 
-## server - 2
+## npm - 2
 
-파일 시스템을 활용해서 응답에 맞는 html을 전달해 줄 수 있다.
+### node_modules
 
-``` typescript
+패키지 의존성에 필요한 파일들 저장
 
-import { readFile } from "fs/promises"
-import { createServer } from "http"
+배포 전 제거하고 배포 된 서버에서 설치하게 하는 경우가 많다.
 
-const server2 = createServer(async (req, res) => {
-    try {
-        res.writeHead(200, { "Content-Type": "text/html; charset=utf-8" })
-        const html = await readFile("./index.html")
-        console.log(html)
-        res.end(html)
-    } catch (error: any) {
-        console.error(error)
-        res.writeHead(200, { "Content-Type": "text/plain; charset=utf-8" })
-        console.log(error)
-        res.end(error.message)
-    }
-}).listen(8081, () => {
-    console.log("8081 서버 대기중!!!")
-})
-server2.on("listening", () => {
-    console.log("8081 서버 대기중!!!")
-})
+### 명령어 설치
 
-server2.on("error", (error) => {
-    console.log("err:", error)
-})
+global 설치, package.json에 미기록
 
-// 8080 서버 대기중
-// 8080 서버 대기중!!!
-// 8081 서버 대기중!!!
-// 8081 서버 대기중!!!
-// <Buffer 3c 21 44 4f 43 54 59 50 45 20 68 74 6d 6c 3e 0a 3c 68 74 6d 6c 20 6c 61 6e 67 3d 22 65 6e 22 3e 0a 20 20 20 20 3c 68 65 61 64 3e 0a 20 20 20 20 20 20 ... 312 more bytes>
-// <Buffer 3c 21 44 4f 43 54 59 50 45 20 68 74 6d 6c 3e 0a 3c 68 74 6d 6c 20 6c 61 6e 67 3d 22 65 6e 22 3e 0a 20 20 20 20 3c 68 65 61 64 3e 0a 20 20 20 20 20 20 ... 312 more bytes>
-
-
+``` zsh
+    npm i -g `module`
 ```
 
-### HTTP 상태 코드
+개발용 설치 package.json에 기록
 
-200, 500같은 숫자는 HTTP의 상태 코드다.
+``` zsh
+    npm i -D `module`
+```
 
-- 2XX : 성공을 알리는 상태 코드. 200(성공), 201(작성됨)
-- 3XX : 리다이렉션(다른 페이지로 이동)을 알리는 상태 코드. 301(영구 이동), 302(임시 이동), 304(수정되지 않음) : 캐시사용
-- 4XX : 요청 오류. 400(잘못된 요청), 401(권한 없음), 403(금지됨), 404(찾을 수 없음)
-- 5XX : 서버 오류. 500(내부 서버 오류), 502(불량 게이트웨이), 503(서비스를 사용할 수 없음)
+npx 설치 - global로 사용, package.json에 기록
 
-### 여러 개 서버 띄우기
+``` zsh
+    npx `module`
+```
 
-한 파일에서 띄우는 포트만 달리해서 서버를 두개 띄울 수도 잇음. 근데 굳이?
+### package-lock.json
 
-<img src="./스크린샷%202022-11-16%20오후%209.23.46.png" />
+버전 문제 처리를 위해 사용, 일반적으로 잘 건드리지는 않는다.
+
+### SemVer(유의적 버저닝) 버저닝
+
+Major(주 버전), Minor(부 버전), Patch(수 버전)
+
+``` SemVer
+    1.0.7
+    1 : 하위 호환이 변경되지 않는 변경 사항
+    0 : 하위 호환이 되는 변경 사항
+    7 : 간단한 버그 수정
+```
+
+### 버전 기호 사용하기
+
+버전 관리를 잘 해야된다. 아니면 앱이 망가질 수 있다.
+
+``` zsh
+^1.3.5 : 메이저 버전 고정
+
+~1.3.5 : 부 버전까지 고정
+
+1.3.5 : 버전 고정
+
+> , <, > = , < = , = 초과, 미만, 이상, 이하, 동일 
+
+@latest : 최신 버전의 패키지 설치
+
+@next : 최신 배포판 (안정되지 않은 알파나 베타 버전의 패키지 설치 가능) ex) 1.1.1-alpha.0, 2.0.0-beta.1, 2.0.0-rc.0
+
+```

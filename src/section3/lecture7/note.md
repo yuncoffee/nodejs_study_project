@@ -1,228 +1,75 @@
-# os와 path
+# cluster
 
-## 노드 내장 모듈 - 1
+## server - 7
 
-### os
+### cluster
 
-브라우저와 달리 노드는 os 모듈에 정보가 담겨 있어 정보를 가져올 수 있음
+싱글 프로세스로 동작하는 노드가 CPU 코어를 모두 사용할 수 있게 도와주는 모듈
 
-``` typescript
-
-import os from "os" // require("os") 대체
-
-console.log("운영체제 정보---------")
-
-console.log("os.arch() : ", os.arch())
-console.log("os.platform() : ", os.platform())
-console.log("os.type() : ", os.type())
-console.log("os.uptime() : ", os.uptime())
-console.log("os.hostname() : ", os.hostname())
-console.log("os.release() : ", os.release())
-
-console.log("운영체제 경로---------")
-
-console.log("os.homedir() : ", os.homedir())
-console.log("os.tmpdir() : ", os.tmpdir())
-
-console.log("운영체제 경로---------")
-
-console.log("os.cpus() : ", os.cpus())
-console.log("os.cpus().length : ", os.cpus().length)
-
-console.log("메모리 경로---------")
-console.log("os.freemem() : ", os.freemem())
-console.log("os.totalmem() : ", os.totalmem())
-
-```
-
-``` console
-운영체제 정보---------
-os.arch() :  x64
-os.platform() :  darwin
-os.type() :  Darwin
-os.uptime() :  182070
-os.hostname() :  coffeegom.local
-os.release() :  20.6.0
-운영체제 경로---------
-os.homedir() :  /Users/coffeegom
-os.tmpdir() :  /var/folders/5y/xxpgvglx3qd46wsmcwyr_vq40000gn/T
-운영체제 경로---------
-os.cpus() :  [
-  {
-    model: 'Intel(R) Core(TM) i9-9880H CPU @ 2.30GHz',
-    speed: 2300,
-    times: { user: 4351910, nice: 0, sys: 2796950, idle: 37309850, irq: 0 }
-  },
-  {
-    model: 'Intel(R) Core(TM) i9-9880H CPU @ 2.30GHz',
-    speed: 2300,
-    times: { user: 34530, nice: 0, sys: 57910, idle: 44356190, irq: 0 }
-  },
-  {
-    model: 'Intel(R) Core(TM) i9-9880H CPU @ 2.30GHz',
-    speed: 2300,
-    times: { user: 3611070, nice: 0, sys: 1981200, idle: 38856390, irq: 0 }
-  },
-  {
-    model: 'Intel(R) Core(TM) i9-9880H CPU @ 2.30GHz',
-    speed: 2300,
-    times: { user: 33750, nice: 0, sys: 50870, idle: 44364010, irq: 0 }
-  },
-  {
-    model: 'Intel(R) Core(TM) i9-9880H CPU @ 2.30GHz',
-    speed: 2300,
-    times: { user: 2689540, nice: 0, sys: 1383350, idle: 40375770, irq: 0 }
-  },
-  {
-    model: 'Intel(R) Core(TM) i9-9880H CPU @ 2.30GHz',
-    speed: 2300,
-    times: { user: 34040, nice: 0, sys: 45780, idle: 44368810, irq: 0 }
-  },
-  {
-    model: 'Intel(R) Core(TM) i9-9880H CPU @ 2.30GHz',
-    speed: 2300,
-    times: { user: 2223060, nice: 0, sys: 1126210, idle: 41099390, irq: 0 }
-  },
-  {
-    model: 'Intel(R) Core(TM) i9-9880H CPU @ 2.30GHz',
-    speed: 2300,
-    times: { user: 34610, nice: 0, sys: 41900, idle: 44372120, irq: 0 }
-  },
-  {
-    model: 'Intel(R) Core(TM) i9-9880H CPU @ 2.30GHz',
-    speed: 2300,
-    times: { user: 1783200, nice: 0, sys: 894820, idle: 41770640, irq: 0 }
-  },
-  {
-    model: 'Intel(R) Core(TM) i9-9880H CPU @ 2.30GHz',
-    speed: 2300,
-    times: { user: 34280, nice: 0, sys: 38480, idle: 44375870, irq: 0 }
-  },
-  {
-    model: 'Intel(R) Core(TM) i9-9880H CPU @ 2.30GHz',
-    speed: 2300,
-    times: { user: 1428760, nice: 0, sys: 695810, idle: 42324080, irq: 0 }
-  },
-  {
-    model: 'Intel(R) Core(TM) i9-9880H CPU @ 2.30GHz',
-    speed: 2300,
-    times: { user: 34050, nice: 0, sys: 35410, idle: 44379160, irq: 0 }
-  },
-  {
-    model: 'Intel(R) Core(TM) i9-9880H CPU @ 2.30GHz',
-    speed: 2300,
-    times: { user: 1094180, nice: 0, sys: 514140, idle: 42840320, irq: 0 }
-  },
-  {
-    model: 'Intel(R) Core(TM) i9-9880H CPU @ 2.30GHz',
-    speed: 2300,
-    times: { user: 33190, nice: 0, sys: 32100, idle: 44383330, irq: 0 }
-  },
-  {
-    model: 'Intel(R) Core(TM) i9-9880H CPU @ 2.30GHz',
-    speed: 2300,
-    times: { user: 733670, nice: 0, sys: 311000, idle: 43403970, irq: 0 }
-  },
-  {
-    model: 'Intel(R) Core(TM) i9-9880H CPU @ 2.30GHz',
-    speed: 2300,
-    times: { user: 32170, nice: 0, sys: 28410, idle: 44388030, irq: 0 }
-  }
-]
-os.cpus().length :  16
-메모리 경로---------
-os.freemem() :  173637632
-os.totalmem() :  17179869184
-```
-
-`os.cpus()` 자주사용
-
-노드가 기본적으로 싱글스레드니까 서버를 여러개 띄울 때 활용
-
-cpu의 스레드와 node의 스레드는 좀 다름;
-
-하드웨어의 스레드 갯수가 노드에서 코어 갯수
-
-### path
-
-경로처리할 떄 사용
-운영체제마다 경로처리가 다른데 path 모듈이 알아서 해줌 개꿀
+- 포트를 공유하는 노드 프로세스를 여러 개 둘 수 있음
+- 요청이 많이 들어왔을 경우 병렬로 실행된 서버의 개수만큼 요청 분산
+- 성능 개선효과
+- 단점 : 컴퓨터 자원(메모리, 세션 등) 공유 불가
+- Redis 등 별도 서버로 해결
 
 ``` typescript
 
-import path from "path"
-import { addEmitHelper } from "typescript"
+import cluster from "cluster"
+import http from "http"
+import os from "os"
 
-const fileName = __filename
+const numCPUs = os.cpus().length
 
-console.log("path.sep : ", path.sep)
-console.log("path.delimiter : ", path.delimiter)
-console.log("------------------")
-console.log("path.dirname() : ", path.dirname(fileName)) // 위치
-console.log("path.extname() : ", path.extname(fileName)) // 확장자
-console.log("path.basename() : ", path.basename(fileName)) // 파일명
-console.log(
-    "path.basename - extname() : ",
-    path.basename(fileName, path.extname(fileName))
-) // 파일명 중 확장자 뺀 거
-console.log("------------------")
-console.log("path.parse() : ", path.parse(fileName)) // 주요 정보 객체
-console.log(
-    "path.format() : ",
-    path.format({
-        root: "/",
-        dir: "/Users/coffeegom/Desktop/project/nodejs_study_project/src/section3/lecture7",
-        base: "path.ts",
-        ext: ".ts",
-        name: "path",
+if (cluster.isMaster) {
+    console.log(`마스터 프로세스 아이디: ${process.pid}`)
+    // CPU 개수만큼 워커를 생산
+    console.log(numCPUs)
+    for (let i = 0; i < numCPUs; i += 1) {
+        cluster.fork()
+    }
+    // 워커가 종료되었을 때
+    cluster.on("exit", (worker, code, signal) => {
+        console.log(`${worker.process.pid}번 워커가 종료되었습니다.`)
+        console.log("code", code, "signal", signal)
+        cluster.fork()
     })
-) // 주요 정보로 path 변환
-console.log(
-    "path.normalize() : ",
-    path.normalize(
-        "/Users/coffeegom/Desktop/project/nodejs_study_project/src/section3/lecture7/path.ts"
-    )
-) // ??
-console.log("------------------")
-console.log("path.isAbsolute(/Users) : ", path.isAbsolute("/Users")) // 절대경로확인
-console.log("------------------")
-console.log(
-    "path.relative() : ",
-    path.relative(
-        "/Users/coffeegom/Desktop/project/nodejs_study_project/src/section3/lecture7/path.ts",
-        "/Users"
-    )
-) // path끼리의 관계 결과
+} else {
+    // 워커들이 포트에서 대기
+    http.createServer((req, res) => {
+        res.writeHead(200, { "Content-Type": "text/html; charset=utf-8" })
+        res.write("<h1>Hello Node!</h1>")
+        res.end("<p>Hello Cluster!</p>")
+        setTimeout(() => {
+            // 워커 존재를 확인하기 위해 1초마다 강제 종료
+            process.exit(1)
+        }, 1000)
+    }).listen(8086)
 
-console.log("path.join() : ", path.join(__dirname, "..", "..", "/path")) // path 경로 결합? (절대경로 무시)
-console.log("path.resolve() : ", path.resolve(__dirname, "..", "..", "path")) // path 경로 결합 (절대경로 우선)
-
-```
-
-``` console
-
-path.sep :  /
-path.delimiter :  :
-------------------
-path.dirname() :  /Users/coffeegom/Desktop/project/nodejs_study_project/src/section3/lecture7
-path.extname() :  .ts
-path.basename() :  path.ts
-path.basename - extname() :  path
-------------------
-path.parse() :  {
-  root: '/',
-  dir: '/Users/coffeegom/Desktop/project/nodejs_study_project/src/section3/lecture7',
-  base: 'path.ts',
-  ext: '.ts',
-  name: 'path'
+    console.log(`${process.pid}번 워커 실행`)
 }
-path.format() :  /Users/coffeegom/Desktop/project/nodejs_study_project/src/section3/lecture7/path.ts
-path.normalize() :  /Users/coffeegom/Desktop/project/nodejs_study_project/src/section3/lecture7/path.ts
-------------------
-path.isAbsolute(/Users) :  true
-------------------
-path.relative() :  ../../../../../../../..
-path.join() :  /Users/coffeegom/Desktop/project/nodejs_study_project/src/path
-path.resolve() :  /path
+// 서버 시작 시 
+// 마스터 프로세스 아이디: 11631
+// 16
+// 11634번 워커 실행
+// 11636번 워커 실행
+// 11635번 워커 실행
+// 11641번 워커 실행
+// 11637번 워커 실행
+// 11640번 워커 실행
+// 11638번 워커 실행
+// 11642번 워커 실행
+// 11643번 워커 실행
+// 11648번 워커 실행
+// 11645번 워커 실행
+// 11646번 워커 실행
+// 11639번 워커 실행
+// 11647번 워커 실행
+// 11644번 워커 실행
+// 11649번 워커 실행
+
+// 서버 종료 시 
+// 11747번 워커가 종료되었습니다.
+// code 1 signal null
+// 11779번 워커 실행
 
 ```
