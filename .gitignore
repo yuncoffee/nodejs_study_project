@@ -1,5 +1,6 @@
 # Dependencies
 /node_modules
+/src/section5/node_modules
 
 # Misc
 .DS_Store
