@@ -1,13 +1,18 @@
 const express = require('express'); // express 가져오기
-
+const path = require('path'); // 경로처리하는 모듈 가져오기
 const app = express(); // express로 부터 app을 가져옴.
 
 app.set('port', process.env.PORT || 3000); 
 // 서버에다가 변수를 심는거. port 변수에 3000 넣는다. 
 // process.env.PORT 입력하지 않으면 3000 
 // 포트를 바꾸고 싶으면 SET PORT = xxx 이렇게 하면 위험함 한번 하면 계속 이걸로 됨. 할수도 있다는거만 알도록.
+// app.get('/', (req,res) => {
+//     res.send('hello express');
+// });
+
+
 app.get('/', (req,res) => {
-    res.send('hello express');
+    res.sendFile(path.join(__dirname, 'index.html'));  // html 파일을 서빙 
 });
 
 app.post('/', (req,res) => {
