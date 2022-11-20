@@ -40,3 +40,39 @@
 
     next('route') 하게되면 get 안에 있는 이 다음에 있는 함수는생략하고 다음 미들웨어로 넘어감. 같은 주소 미들웨어일때
     - if문안에 쓰면 유용.
+
+
+
+# app.use(morgan(???));
+
+    - 요청과 응답을 기록하는 라우터.
+    - 개발할때는 dev
+    - 배포시 combined = 좀 더 자세하게 기록이 됨. ip, 브라우저, 시간 알수있음
+
+
+# cookieparser
+    -
+    req.cookies // { mycookie : 'test'}
+    req.signedCookies; // 암호화
+    // 'Set-Cookie': `session=${uniqueInt}; Expires=${expires.toGMTString()}; HttpOnly; Path=/`,
+    res.cookie('name', encodeURIComponent(name), {
+        expires: new Date(),
+        httpOnly: true,
+        path: '/', 
+    })
+    res.clearcookie('name', encodeURIComponent(name), {
+        httpOnly: true,
+        path: '/', 
+    })
+
+
+모든 미들웨어는 내부적으로 next를 실행.
+static은 거기서 끝내버림. 찾으면.
+static 위치가 중요함 대부분 파싱들 위에 다가함.
+
+
+# session
+    -개인의 저장공간을 만들어 주는거.
+
+미들웨어 데이터 전송할때는
+req.data = XXX; 
