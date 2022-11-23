@@ -2,7 +2,7 @@
 /node_modules
 /src/section5/node_modules
 /src/section5/.env
-
+/src/section6/lecture5-10/learn-sequelize/node_modules
 # Misc
 .DS_Store
 .env.local
