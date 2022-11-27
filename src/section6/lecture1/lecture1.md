@@ -59,3 +59,53 @@
             - UNSIGNED : 0과 양수만 허용
             - ZEROFILL : 숫자의 자리 수가 고정된 경우 빈 자리에 0을 넣음
             - DEFAULT now() : 날짜 컬럼의 기본값을 현재 시간으로
+
+# CRUD
+    - CREATE READ UPDATE DELETE
+
+    ※ CREATE 
+        => IMSERT INTO 테이블 (컬럼명들) VALURES(값들)
+
+        ex) INSERT INTO nodejs.users (name, age, married, comment) VALURES ('honeyduck', 28, 0, '자기소개1');
+        ex) INSERT INTO nodejs.comments (commenter, comment) VALURES (1, '안녕하세요. honeyduck의 댓글입니다.');
+
+    ※ READ 
+        => SELECT 컬럼 FROM 테이블명
+        => SELECT *은 모든 컬럼을 선택한다는 의미
+        => 컬럼만 따로 추리는 것도 가능
+            ex) SELECT name,married FROM nodejs.users;
+
+        => WHERE로 조건을 주어 선택 가능
+            - AND로 여러가지 조건을 동시에 만족하는 것을 찾음
+                ex) SELECT name, age FROM nodejs.users WHERE married = 1 AND age > 30;
+            - OR로 여러가지 조건 중 하나 이상을 만족하는 것을 찾음
+                ex) SELECT id, name FROM nodejs.users WHERE married = 0 OR age > 30;
+        
+        => ORDER BY로 특정 컬럼 값 순서대로 정렬 가능
+            - DESC는 내림차순, ASC 오름차순
+                ex) SELECT id, name FROM nodejs.users ORDER BY age DESC;
+
+        => LIMIT, OFFSET
+            - LIMIT으로 조회할 개수 제한
+                ex) SELECT id, name FROM nodejs.users ORDER BY age DESC LIMIT 1;
+            - OFFSET으로 앞의 로우들 스킵 가능(OFFSET 2면 세 번째 것부터 찾음)
+                ex) SELECT id, name FORM nodejs.users ORDER BY age DESC LIMIT 1 OFFSET 1;
+
+    ※ UPDATE
+        => 데이터베이스에 있는 데이터를 수정하는 작업
+            - UPDATE 테이블명 SET 컬럼=새값 WHERE 조건
+                ex) UPDATE nodejs.users SET comment = '바꿀 내용' WHERE id = 2; 
+    
+    ※ DELETE
+        => 데이터베이스에 있는 데이터를 삭제하는 작업
+            - DELETE FROM 테이블명 WHERE 조건
+                ex) DELETE FORM nodejs.users WHERE id = 2;
+
+# 시퀄라이즈 사용하기
+    => SQL 작업을 쉽게 할 수 있도록 도와주는 라이브러리
+    => 시퀄라이즈 명령어 사용하기 위해 sequelize-cli 설치
+        ex) npm i express morgan nunjucks sequelize sequelize-cli mysq12
+            npm i -D nodemon 
+
+            npx sequelize init
+    
