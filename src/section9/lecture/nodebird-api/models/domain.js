@@ -20,7 +20,7 @@ module.exports = class Domain extends Sequelize.Model {
       },
       // ex) KAKAO KEY 처럼 KEY 발급
       clientSecret: {
-        type: Sequelize.STRING(36),
+        type: Sequelize.STRING(36),     // type: Sequelize.UUID ==> UUID인지 아닌지.  // mysql 은 UUIDV4가 안됨
         allowNull: false,
       },
     }, {
