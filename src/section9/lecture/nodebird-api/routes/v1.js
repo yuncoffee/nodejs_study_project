@@ -1,4 +1,3 @@
-// nodecat 이 nodebird API 에서 부터 데이터를 가져갈 수 있게. 요청을 처리할 수 있는 라우터
 const express = require('express');
 const jwt = require('jsonwebtoken');
 
@@ -7,11 +6,9 @@ const { Domain, User } = require('../models');
 
 const router = express.Router();
 
-// Token을 발급해 주는 router
 router.post('/token', async (req, res) => {
   const { clientSecret } = req.body;
   try {
-    // domain 등록 했나 검사, 요금제 검사, 할당량 검사 등등
     const domain = await Domain.findOne({
       where: { clientSecret },
       include: {
@@ -25,7 +22,6 @@ router.post('/token', async (req, res) => {
         message: '등록되지 않은 도메인입니다. 먼저 도메인을 등록하세요',
       });
     }
-    // Token 발급.
     const token = jwt.sign({
       id: domain.User.id,
       nick: domain.User.nick,
@@ -47,7 +43,6 @@ router.post('/token', async (req, res) => {
   }
 });
 
-// 제대로 발급 했는지 test하는 router
 router.get('/test', verifyToken, (req, res) => {
   res.json(req.decoded);
 });
