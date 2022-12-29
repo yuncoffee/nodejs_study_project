@@ -17,7 +17,7 @@ describe('follow', () => {
     User.findOne.mockReturnValue({
       addFollowing(id) {
         return Promise.resolve(true);
-      }
+      } 
     });
     await follow(req, res, next); // 비동기라서 await 붙혀줘야댐.
     expect(res.send).toBeCalledWith('success');
