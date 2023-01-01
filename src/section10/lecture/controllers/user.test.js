@@ -13,13 +13,13 @@ describe('follow', () => {
   };
   const next = jest.fn();
 
-  test('사용자를 찾아 팔로잉을 추가하고 success를 응답해야 함', async () => { 
+  test('사용자를 찾아 팔로잉을 추가하고 success를 응답해야 함', async () => {
     User.findOne.mockReturnValue({
       addFollowing(id) {
         return Promise.resolve(true);
-      } 
+      }
     });
-    await follow(req, res, next); // 비동기라서 await 붙혀줘야댐.
+    await follow(req, res, next);
     expect(res.send).toBeCalledWith('success');
   });
 
