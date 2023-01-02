@@ -6,7 +6,7 @@
     </head>
     <body>
         <div>F12를 눌러 console 탭과 network 탭을 확인하세요.</div>
-        <script>
+        <!-- <script>
             // socket 연결
             const webSocket = new WebSocket("ws://localhost:8005")
             // 소켓 연결 시  이벤트
@@ -18,6 +18,17 @@
                 console.log(event.data)
                 webSocket.send("클라이언트에서 서버로 답장을 보냅니다")
             }
+        </script> -->
+        <script src="/socket.io/socket.io.js"></script>
+        <script>
+            const socket = io.connect("http://localhost:8005", {
+                path: "/socket.io",
+                transports: ["websocket"],
+            })
+            socket.on("news", function (data) {
+                console.log(data)
+                socket.emit("reply", "Hello Node.JS")
+            })
         </script>
     </body>
 </html>
